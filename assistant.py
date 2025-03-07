@@ -37,21 +37,23 @@ def main():
         
         print("\nSearching your notes... 🔎")
         
-        try:
-            # Query vector store for relevant documents
-            search_results = query_vector_store(query)
+        # try:
+        # Query vector store for relevant documents
+        search_results = query_vector_store(query)
+        
+        print("\nGenerating response... 🧠")
+        
+        # Generate response using LLM
+        response = generate_response(query, search_results)
+        
+        # Print response
+        print("\n🤖 Answer:")
+        print("-" * 50)
+        print(response)
+        print("-" * 50 + "\n")
             
-            # Generate response using LLM
-            response = generate_response(query, search_results)
-            
-            # Print response
-            print("\n🤖 Answer:")
-            print("-" * 50)
-            print(response)
-            print("-" * 50 + "\n")
-            
-        except Exception as e:
-            print(f"\n❌ Document Query Error: {str(e)}")
+        # except Exception as e:
+            # print(f"\n❌ Document Query Error: {str(e)}")
         
         # Prompt to continue
         input("\nPress Enter to ask another question...")
