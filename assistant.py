@@ -1,5 +1,5 @@
 from vector_store import query_vector_store
-from llm import generate_response
+from llm import generate_response, generate_streaming_response
 import os
 import sys
 import warnings
@@ -35,30 +35,25 @@ def main():
         if not query.strip():
             continue
         
-        print("\nSearching your notes... 🔎")
+        # Initialize search_results as empty list
+        search_results = []
         
-        # try:
-        # Query vector store for relevant documents
-        search_results = query_vector_store(query)
+        if "read" in query.lower() and "note" in query.lower():
+            print("\nSearching your notes... 🔎")
+            search_results = query_vector_store(query)
         
         print("\nGenerating response... 🧠")
         
-        # Generate response using LLM
-        response = generate_response(query, search_results)
-        
-        # Print response
+        # Print response header
         print("\n🤖 Answer:")
         print("-" * 50)
-        print(response)
-        print("-" * 50 + "\n")
-            
-        # except Exception as e:
-            # print(f"\n❌ Document Query Error: {str(e)}")
         
-        # Prompt to continue
-        input("\nPress Enter to ask another question...")
-        clear_screen()
-        print_header()
+        # Stream the response token by token
+        for token in generate_streaming_response(query, search_results):
+            print(token, end="", flush=True)
+        
+        # Print footer after streaming is complete
+        print("\n" + "-" * 50 + "\n")
 
 if __name__ == "__main__":
     main()
